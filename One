@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تأثير العملات الذهبية المتطايرة</title>
+  <style>
+    :root{
+      --coin-size-min: 24px;
+      --coin-size-max: 64px;
+      --fall-duration-min: 4s;
+      --fall-duration-max: 10s;
+      --wind-duration-min: 3s;
+      --wind-duration-max: 8s;
+    }
+    html,body{height:100%;margin:0;font-family:Segoe UI, Tahoma, Arial, sans-serif;background:linear-gradient(180deg,#0b1020 0%, #081226 45%, #0f1724 100%);color:#fff}
+    header{padding:20px;text-align:center}
+    header h1{margin:0 0 8px;font-size:24px;letter-spacing:1px}
+    header p{margin:0;opacity:0.85}
+    .controls{position:fixed;left:16px;bottom:16px;z-index:9999;display:flex;gap:8px;align-items:center}
+    .btn{background:linear-gradient(#ffd766,#f2b50f);border:none;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+    .btn.secondary{background:rgba(255,255,255,0.08);color:#fff}
+    .fx-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1000}
+    .coin{
+      position:absolute;width:48px;height:48px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      transform-origin:center center;
+      will-change:transform, left, top, opacity;
+      box-shadow:0 6px 18px rgba(0,0,0,0.35);
+      background:radial-gradient(circle at 30% 30%, #fff6b8 0%, #ffd84d 30%, #f2b50f 60%, #b38500 100%);
+      border:2px solid rgba(255, 255, 255, 0.08);
+    }
+    .coin::after{
+      content:'';position:absolute;inset:10% 10% 10% 10%;border-radius:50%;
+      background: conic-gradient(from 90deg, rgba(255,255,255,0.06), transparent 30%);
+      mix-blend-mode:overlay;opacity:0.9;
+    }
+    .goldbar{
+      position:absolute;width:70px;height:28px;border-radius:6px;display:block;align-items:center;justify-content:center;
+      background:linear-gradient(90deg,#fff3b0,#ffd94a,#d9a200);box-shadow:0 8px 20px rgba(0,0,0,0.45);
+      transform-origin:center;will-change:transform,opacity,left,top;pointer-events:none;
+    }
+    @keyframes fall{
+      0%{transform:translateY(-10vh) rotateZ(0) translateX(0);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(110vh) rotateZ(720deg) translateX(var(--drift, 50px));opacity:0.95}
+    }
+    main{padding:20px;max-width:980px;margin:20px auto}
+    .note{opacity:0.8;font-size:13px;margin-top:8px}
+    .fx-paused{display:none}
+    @media (max-width:480px){
+      :root{--coin-size-max:48px}
+      header h1{font-size:20px}
+      .btn{padding:8px 10px}
+    }
+  </style>
+</head>
+<body>
+  <header>
